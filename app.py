@@ -13,6 +13,7 @@ app.register_blueprint(health_bp, url_prefix="/api")
 app.register_blueprint(chat_bp, url_prefix="/api")
 
 
+
 @app.route("/")
 def home():
     return {
@@ -21,4 +22,4 @@ def home():
     }
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=False)
+    app.run(host="0.0.0.0", port=5000)
