@@ -5,11 +5,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv("OPENWEATHER_API_KEY")
-print("API KEY:", API_KEY)
 
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
 def get_weather(city):
+
+    if not API_KEY:
+        return {"error": "OpenWeather API key is not configured"}
 
     params = {
         "q": city,
@@ -19,8 +21,17 @@ def get_weather(city):
 
     response = requests.get(BASE_URL, params=params)
 
-    if response.status_code != 200:
+    print("OpenWeather status:", response.status_code)
+    print("OpenWeather response:", response.text)
+
+    if response.status_code == 401:
+        return {"error": "Invalid OpenWeather API key"}
+
+    if response.status_code == 404:
         return {"error": "City not found"}
+
+    if response.status_code != 200:
+        return {"error": "Unable to fetch weather data"}
 
     data = response.json()
 
