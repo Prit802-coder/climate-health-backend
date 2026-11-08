@@ -37,8 +37,16 @@ def seed_wards_if_empty(db: Session):
 
 @router.get("/ward-telemetry", response_model=List[WardOut])
 def get_wards(db: Session = Depends(get_db)):
+    print("[WARD] Request started")
+
+    print("[WARD] Starting seed check")
     seed_wards_if_empty(db)
+    print("[WARD] Seed check completed")
+
+    print("[WARD] Starting database query")
     wards = db.query(WardTelemetry).all()
+    print(f"[WARD] Query completed. Records: {len(wards)}")
+
     return [
         WardOut(
             id=w.ward_id,
